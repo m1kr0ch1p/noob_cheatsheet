@@ -1,0 +1,10 @@
+% arpspoof, sniffing
+
+# instalando a suite dsnif
+sudo apt install dsniff
+
+# configurando o ip_forward
+sudo echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# sniffando
+arpspoof -i <interface> -t <IP alvo> <IP gateway>
