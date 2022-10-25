@@ -1,4 +1,0 @@
-% Responder, sniffing
-
-# Ouvindo a rede para buscar credencial
-python Responder.py -I <interface> --lm
