@@ -1,0 +1,50 @@
+% enum, web
+
+# gobuster 
+gobuster -w <wordlist> -u <url_ou_IP>
+
+# Dirb
+dirb <diretorio> -w <wordlist>
+
+# Nikto 
+nikto -h <IP>
+
+# Nmap HTTP enum
+nmap --script=http-enum -p80 -n <ip_ou_range>
+
+# Nmap check de metodo HTTP 
+nmap --script http-methods --script-args http-methods.url-path='/test' <ip>
+
+# Ver Opcoes disponiveis em um web server
+curl -vX OPTIONS vm/test
+
+# Busca de diretorios com Uniscan
+uniscan -qweds -u <url>
+
+# Wfuzz
+
+wfuzz -c -w /usr/share/wfuzz/wordlist/general/megabeast.txt <IP>:<PORTA>/?FUZZ=test
+
+wfuzz -c --hw 114 -w /usr/share/wfuzz/wordlist/general/megabeast.txt <IP>:<PORTA>/?page=FUZZ
+
+wfuzz -c -w /usr/share/wfuzz/wordlist/general/common.txt "<IP>:<PORTA>/?page=mailer&mail=FUZZ"
+
+wfuzz -c -w /usr/share/seclists/Discovery/Web_Content/common.txt --hc 404 <IP>/FUZZ
+
+# Wfuzz Recursive level 3
+wfuzz -c -w /usr/share/seclists/Discovery/Web_Content/common.txt -R 3 --sc 200 <IP>/F\ 2 UZZ
+
+# Nmap port knock (Secured with Knockd)
+for i in 7000 8000 9000; do nmap -Pn --host_timeout 201 -max-retries 0 -p $i server_\ 2 ip_address; done
+
+# WordPress Scan (WPScan)
+wpscan --url $ip/blog --proxy $ip:3129
+
+# RSH Enum - Unencrypted file transfer system 
+Metasploit auxiliary/scanner/rservices/rsh_login
+
+# Finger Enum 
+finger @<IP>
+
+# Finger com usuario
+finger <usuario>@<IP>
