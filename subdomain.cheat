@@ -1,0 +1,19 @@
+% Enum, subdominio
+
+# Subbrute
+python subbrute.py <dominio>
+
+# Subbrute passando lista de dominios
+python subbrute.py -h -s <arquivo>
+
+# DNSRecon
+dnsrecon -d <dominio>
+
+# TheHarvester
+theharvester -d <dominio> -b google -l 200 -f /root/Desktop/msresults.html && theharvester -d <dominio> -b linkedin -l 200
+
+# Transferencia de zona (zone transfer) com nslookup
+nslookup -type=NS <dominio>
+
+# Transferencia de zona (zone transfer) com dig
+dig @<nome_do_servidor> axfr <dominio>
