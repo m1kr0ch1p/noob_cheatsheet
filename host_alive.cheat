@@ -1,4 +1,4 @@
-% host alive, network scan
+% scanning, host alive, network scan
 
 # NetDiscover (ARP Scanning) por interface
 netdiscover -i <interface>
