@@ -1,0 +1,19 @@
+% host alive, network scan
+
+# NetDiscover (ARP Scanning) por interface
+netdiscover -i <interface>
+
+# NetDiscover (ARP Scanning) por range
+netdiscover -r <range>
+
+# Nmap host alive
+nmap -sn <range>
+
+# Nbtscan
+nbtscan -r <range>
+
+# Linux Ping Sweep (Bash)
+for i in {1..254}; do (ping -c 1 <tres_primeiros_octetos>.$i | grep "bytes from" &); done
+
+Windows Ping Sweep (executando no Windows)
+for /L %i in (1,1,255) do @ping -n 1 -w 200 <tres_primeiros_octetos>.%i > nul && echo <tres_primeiros_octetos>.%i is up.
