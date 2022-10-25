@@ -1,0 +1,10 @@
+% scanning, fingerprint, system
+
+# Nmap OS detection
+nmap -O -n <IP>
+
+# Nmap All
+nmap -A -n <IP>
+
+# Passive OS Fingerprinting (p0f)
+python p0f -i <interface>
