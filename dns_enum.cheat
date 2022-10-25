@@ -1,0 +1,33 @@
+
+% enum, dns
+
+# Host ns
+host -t ns <dominio> # -t : type , ns: dns
+
+# Host, nx
+host -t mx <dominio> # mx : mail server
+
+# Host passando um arquivo com lista de subdominios
+for i in $(cat <arquivo>); do host $i.<dominio>; done
+
+# Nslookup
+nslookup <dominio>
+
+# Dig
+dig <dominio>
+
+# Reverse Lookup Brute Force
+for ip in $(seq 1 255); do host <tres_primeiros_octetos>.$ip; done | grep -v "not found" | grep -v :: --invert-match
+
+# DNSRecon
+dnsrecon -d <dominio> -t axfr  • -d :: domain
+
+# DNSEnum
+
+dnsenum <dominio>
+
+# fierce
+fierce --domain <dominio>
+
+# NMAP DNS Hostnames Lookup
+nmap -F --dns-server <dominio>
