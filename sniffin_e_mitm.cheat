@@ -15,10 +15,11 @@ python MultiRelay.py -t <IP_alvo> -u ALL -d
 # MITMF - Man in The Middle Framework
 python mitmf.py -i eth0 --spoof --arp --dns --hsts --gateway <gateway> --targets <IP_alvo>
 
-# Bettercap
-
+# Bettercap no-spoofing
 bettercap -I <interface> --no-spoofing
 
+# Bettercap com IP definido
 bettercap -I <interface> -T <IP_alvo>
 
+# Bettercap com gateway e IP
 bettercap -I <interface> -G <gateway> -T <IP_alvo>
