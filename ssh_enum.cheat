@@ -1,0 +1,4 @@
+@ ssh, enum
+
+# ssh enum (https://www.exploit-db.com/exploits/45233)
+python 45233.py --port 22000 --userList users <IP>
