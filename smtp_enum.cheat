@@ -1,0 +1,22 @@
+% enum, smtp, simple mail transfer protocol
+
+# SMTP com Netcat
+nc -nv <IP> 25
+
+## SMTP Users
+echo "search https://cr.yp.to/smtp/vrfy.html and https://www.proofpoint.com/us/open-source-email-solution"
+
+# SMTP com nmap 
+nmap --script smtp-commands <IP> -p 25
+
+# SMTP com telnet
+telnet <IP> 25
+
+# sobre SMT mail e vrfy
+echo " search https://cr.yp.to/smtp/mail.html and https://cr.yp.to/smtp/vrfy.html"
+
+# SMTP-user-enum
+echo "search http://pentestmonkey.net/tools/user-enumeration/smtp-user-enum"
+
+# SMTP user enum
+smtp-user-enum -M VRFY -U <user_list_file> -t <IP>
