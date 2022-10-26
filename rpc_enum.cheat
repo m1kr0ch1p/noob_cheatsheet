@@ -1,0 +1,43 @@
+
+% rpc, enum
+
+# Nmap NSE rpc enum
+nmap --script rpc-grind,rpcinfo <IP> -p 111
+
+# Rpcinfo
+rpcinfo -p <IP>
+
+# Rpc enum no Windows
+C:\>nbtstat -A <IP>
+```
+
+# NBTSCAN
+nbtscan -v <IP>
+
+# Net Command (Windows)
+echo " search https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windowsxp/bb490949(v=technet.10) and https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/hh875576(v=ws.11)"
+
+# Rpc net command Windows
+C:\>net view <IP>
+
+# Rpc net command Windows para ver os share
+C:\>net use <particao> \\<IP>\<share>
+
+# SMBClient listar shares
+smbclient -L <IP>
+
+# montar shares
+sudo mount.cifs //<IP>/<share> /media/K_share/ user=,pass=
+
+# Null Session
+C:\>net use \\<IP>\<share> "" <particao>""
+
+# Winfo
+winfo <IP> -n
+
+# Enum4Linux
+enum4linux <IP>
+```
+
+## RPCClient (use os comandos enumdomuser e enum)
+rpcclient -N -U "" <IP>
