@@ -1,0 +1,16 @@
+% nfs, enum, network file system
+
+# mostrar shares NFS disponiveis com Nmap NSE
+nmap -sV --script=nfs-showmount <IP>
+
+# mostrar shares NFS disponiveis com Nmap na porta 2049 UDP
+nmap -sT -sU -sV -p 2049 <IP>
+
+# mostrar shares NFS disponiveis com Nmap NSE mais detalhado
+nmap --scritp nfs-ls,nfs-showmount,nfs-statfs <IP>
+
+# mostrar shares NFS disponiveis com showmount
+showmount -e <IP>
+
+# montar um share NFS local
+mkdir -p <diretorio_local_para_o_share> && mount -t nfs <NFS_Server_IP>:<share_remoto> <diretorio_local_para_o_share> -o nolock && mount && cd <diretorio_local_para_o_share> && ls -la
