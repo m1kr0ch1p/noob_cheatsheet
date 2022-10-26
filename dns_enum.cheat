@@ -2,10 +2,10 @@
 % enum, dns
 
 # Host ns
-host -t ns <dominio> # -t : type , ns: dns
+host -t ns <dominio>
 
 # Host, nx
-host -t mx <dominio> # mx : mail server
+host -t mx <dominio>
 
 # Host passando um arquivo com lista de subdominios
 for i in $(cat <arquivo>); do host $i.<dominio>; done
@@ -41,7 +41,6 @@ dnsrecon -d <dominio> -t axfr  • -d :: domain
 dnsrecon -d <dominio> -D /usr/share/wordlists/dnsmap.txt -t std --xml <file_name>.xml
 
 # DNSEnum
-
 dnsenum <dominio>
 
 # fierce
