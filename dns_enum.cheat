@@ -10,17 +10,35 @@ host -t mx <dominio> # mx : mail server
 # Host passando um arquivo com lista de subdominios
 for i in $(cat <arquivo>); do host $i.<dominio>; done
 
+# Reverse lookup
+for ip in $(seq 1 255); do host <tres_primeiros_octetos>.$ip; done | grep -v "not found"
+
 # Nslookup
 nslookup <dominio>
 
+# Nslookup Zone Transfer
+nslookup -> set type=any -> ls -d <dominio>
+
 # Dig
 dig <dominio>
+
+# Dig Zone Transfer
+dig axfr <dominio> <url_dominio> @<ns1.dominio>
+
+# Dig MX record lookup
+dig mx <dominio> <url_dominio> @<ns1.dominio>
+
+# Dig IP Lookup
+Dig a <dominio> <url_dominio> @<ns1.dominio>
 
 # Reverse Lookup Brute Force
 for ip in $(seq 1 255); do host <tres_primeiros_octetos>.$ip; done | grep -v "not found" | grep -v :: --invert-match
 
 # DNSRecon
 dnsrecon -d <dominio> -t axfr  • -d :: domain
+
+# DNSRecon Bruteforce
+dnsrecon -d <dominio> -D /usr/share/wordlists/dnsmap.txt -t std --xml <file_name>.xml
 
 # DNSEnum
 
