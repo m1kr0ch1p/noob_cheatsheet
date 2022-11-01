@@ -1,0 +1,19 @@
+% scanning, nmap, netdiscover, nbtscan, ping sweep
+
+# Netdiscover ARP Scanning (interface)
+netdiscover -i <interface>
+
+# Netdiscover ARP Scanning (range)
+netdiscover -r <IP_range>
+
+# Nmap network scanning
+nmap -sn <IP_ou_range>
+
+# Nbtscan
+nbtscan -r <range>
+
+# bash ping sweep
+for i in {1..254}; do (ping -c 1 <tres_primeiros_octetos>.$i | grep "bytes from" &); done
+
+# Windows ping sweep
+for /L %i in (1,1,255) do @ping -n 1 -w 200 <tres_primeiros_octetos>.%i > nul && echo <tres_primeiros_octetos>.%i is up
