@@ -1,0 +1,7 @@
+netcat, ncat
+
+# netcat banner grabbing
+nc 192.168.0.25 22
+
+# ncat banner grabbing
+ncat 192.168.0.25 22
