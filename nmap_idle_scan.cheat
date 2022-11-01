@@ -1,0 +1,16 @@
+% nmap, hping, idle scan
+
+# Nmap idle scan step 1 - find a good candidate zombie
+nmap -O -v <IP_ou_range>
+
+# Nmap idle scan step 2 - scan the target
+nmap -Pn -sI <zoombie_IP>:<zommbie_port> <target> -v -p <port>
+
+# hping3 idle scan step 1 - find a good candidate zombie
+hping3 0S -r -p <port> <IP>
+
+# hping3 idle scan step 2 - scan the target
+hping3 -a <Zombie_IP> -S -p <TargetPort> <Target_IP>
+
+# hping3 idle scan step 3 - To monitor the zombie ID
+hping3 0S -r -p <port> <IP_address>
