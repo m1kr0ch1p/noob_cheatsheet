@@ -1,0 +1,13 @@
+% Nmap, ids evasion, firewall evasion, stealth
+
+# nmap fragmentation
+nmap -sS -f <IP>
+
+# nmap decoys
+nmap -sS -D <DecoyIP#1>, <DecoyIP#2>, <DecoyIP#3>, <AttackerIP> <TargetIP>
+
+# nmap timing
+nmap -sS -T<0~5> <Target_IP>
+
+# Nmap source port
+nmap -g <source_port> -sS <IP_ou_range>
