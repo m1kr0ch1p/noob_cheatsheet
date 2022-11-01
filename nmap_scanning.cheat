@@ -1,0 +1,94 @@
+% Nmap, scanning
+
+# -sS (TCP Syn Scan)
+nmap -sS -p 135 <IP_ou_range>
+
+# -sT (TCP Connect Scan)
+nmap -sT -p 135 <IP_ou_range>
+
+# -sU (UDP Scan)
+nmap -sU -p 137 <IP_ou_range>
+
+# -sA (TCP ACK scan )
+nmap -sA <IP_ou_range> -p <port>
+
+# -s0 (IP Protocol Scan)
+nmap -s0 <IP_ou_range>
+
+# Nmap probing service
+nmap -sV <option> <IP_ou_range>
+
+# Nmap stealth scan using SYN  
+nmap -sS <IP_ou_range>
+
+# Nmap stealth scan using FIN  
+nmap -sF <IP_ou_range>
+
+# Nmap Banner Grabbing  
+nmap -sV -sT <IP_ou_range>
+
+# Nmap OS Fingerprinting  
+nmap -O <IP_ou_range>
+
+# Nmap Regular Scan
+nmap <IP_ou_range>
+
+# Enumeration Scan  
+nmap -p 1-65535 -sV -sS -A -T4 <IP_ou_range> -oN <arquivo_saida>
+
+# Enumeration Scan All Ports TCP / UDP and output to a txt file  
+nmap -oN <arquivo_saida> -v -sU -sS -p- -A -T4 <IP_ou_range>
+
+# Nmap output to a file
+nmap -oN <arquivo_saida> -p 1-65535 -sV -sS -A -T4 <IP_ou_range>
+
+# Quick Scan
+nmap -T4 -F <IP_ou_range>
+
+# Quick Scan Plus:  
+nmap -sV -T4 -O -F --version-light <IP_ou_range>
+
+# Quick traceroute  
+nmap -sn --traceroute <IP_ou_range>
+
+# All TCP and UDP Ports  
+nmap -v -sU -sS -p- -A -T4 <IP_ou_range>
+
+# Intense Scan
+nmap -T4 -A -v <IP_ou_range>
+
+# Intense Scan Plus UDP  
+nmap -sS -sU -T4 -A -v <IP_ou_range>
+
+# Intense Scan ALL TCP Ports  
+nmap -p 1-65535 -T4 -A -v <IP_ou_range>
+
+# Intense Scan - No Ping  
+nmap -T4 -A -v -Pn <IP_ou_range>
+
+# Ping scan  
+nmap -sn <IP_ou_range>
+
+# Slow Comprehensive Scan  
+nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)" <IP_ou_range>
+
+# Scan with Active connect in order to weed out any spoofed ports designed to troll you  
+nmap -p1-65535 -A -T5 -sT <IP_ou_range>
+	
+# DNS Brute Force
+nmap -p 80 --script dns-brute <IP_ou_range>
+
+# Find virtual hosts on an IP address 
+nmap -p 80 --script hostmap-bfk <IP_ou_range>
+
+# Traceroute Geolocation
+nmap -p 80 --traceroute --script traceroute-geolocation.nse <IP_ou_range>
+
+# web path brute force
+nmap -p 80 --script http-enum <IP_ou_range>
+
+# HTTP Title
+nmap -p 80 -sV --script http-title <IP_ou_range>
+
+# Nmap MSSQL Information Gathering 
+nmap -p 1433 --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args mssql.instance port=1433,mssql.username=sa,mssql.password=,mssql.instance-name=MSSQLSERVER <IP_ou_range>
