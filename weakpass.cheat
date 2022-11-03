@@ -1,0 +1,37 @@
+% weak password, ncrack, medusa, patator, eyewitness, rsmangler, cewl, mentalist
+
+# mentalist
+echo "see https://github.com/sc0tfree/mentalist and https://github.com/sc0tfree/mentalist/wiki"
+
+# cewl
+cewl -m <min_word_length> <url>
+
+# rsmangler
+echo "see https://digi.ninja/projects/rsmangler.php"
+
+# eyewitness (https://github.com/ChrisTruncer/EyeWitness)
+python EyeWitness.py --headless --prepend-https -f <urls_file_list>
+
+# patator ssh
+patator ssh_login host=<IP> user=<usuario> password=FILE0 0=<wordlist> -x ignore:mesg='Authentication failed.
+
+# patator ssh passing lists
+patator ssh_login host=FILE0 user=FILE1 password=FILE2 0=<hosts_list> 1=<users_list> 2=<wordlist>
+
+# patator other modules (doubts, patator -h or https://github.com/lanjelot/patator)
+patator <module> host=FILE0 user=FILE1 password=FILE2 0=<hosts_list> 1=<users_list> 2=<wordlist>
+
+# medusa (knowing specific module)
+medusa -M <module> -q
+
+# medusa
+medusa -h <IP> -M <service_name> -U <user_list> -P <wordlist>
+
+# ncrack (basic)
+ncrack <service_name>://<IP>:<port
+
+# ncrack passing lists
+ncrack <service_name>://<IP>:<port -U <users_list> -P <wordlist>
+
+# ncrack
+ncrack supports the following services: FTP, SSH, TELNET, HTTP(S), POP3(S), SMB, RDP and VNC
